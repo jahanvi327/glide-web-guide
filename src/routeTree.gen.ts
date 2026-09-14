@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as DashboardRouteRouteImport } from './routes/dashboard/route'
 import { Route as DashboardIndexRouteImport } from './routes/dashboard/index'
 import { Route as DashboardAttributionRouteImport } from './routes/dashboard/attribution'
 import { Route as DashboardDetectionRouteImport } from './routes/dashboard/detection'
@@ -26,59 +27,65 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const DashboardIndexRoute = DashboardIndexRouteImport.update({
-  id: '/dashboard/',
-  path: '/dashboard/',
+const DashboardRouteRoute = DashboardRouteRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
   getParentRoute: () => rootRouteImport,
+} as any)
+const DashboardIndexRoute = DashboardIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => DashboardRouteRoute,
 } as any)
 const DashboardAttributionRoute = DashboardAttributionRouteImport.update({
-  id: '/dashboard/attribution',
-  path: '/dashboard/attribution',
-  getParentRoute: () => rootRouteImport,
+  id: '/attribution',
+  path: '/attribution',
+  getParentRoute: () => DashboardRouteRoute,
 } as any)
 const DashboardDetectionRoute = DashboardDetectionRouteImport.update({
-  id: '/dashboard/detection',
-  path: '/dashboard/detection',
-  getParentRoute: () => rootRouteImport,
+  id: '/detection',
+  path: '/detection',
+  getParentRoute: () => DashboardRouteRoute,
 } as any)
 const DashboardExplanationsRoute = DashboardExplanationsRouteImport.update({
-  id: '/dashboard/explanations',
-  path: '/dashboard/explanations',
-  getParentRoute: () => rootRouteImport,
+  id: '/explanations',
+  path: '/explanations',
+  getParentRoute: () => DashboardRouteRoute,
 } as any)
 const DashboardHistoryRoute = DashboardHistoryRouteImport.update({
-  id: '/dashboard/history',
-  path: '/dashboard/history',
-  getParentRoute: () => rootRouteImport,
+  id: '/history',
+  path: '/history',
+  getParentRoute: () => DashboardRouteRoute,
 } as any)
 const DashboardMetadataRoute = DashboardMetadataRouteImport.update({
-  id: '/dashboard/metadata',
-  path: '/dashboard/metadata',
-  getParentRoute: () => rootRouteImport,
+  id: '/metadata',
+  path: '/metadata',
+  getParentRoute: () => DashboardRouteRoute,
 } as any)
 const DashboardReportsRoute = DashboardReportsRouteImport.update({
-  id: '/dashboard/reports',
-  path: '/dashboard/reports',
-  getParentRoute: () => rootRouteImport,
+  id: '/reports',
+  path: '/reports',
+  getParentRoute: () => DashboardRouteRoute,
 } as any)
 const DashboardReviewRoute = DashboardReviewRouteImport.update({
-  id: '/dashboard/review',
-  path: '/dashboard/review',
-  getParentRoute: () => rootRouteImport,
+  id: '/review',
+  path: '/review',
+  getParentRoute: () => DashboardRouteRoute,
 } as any)
 const DashboardSettingsRoute = DashboardSettingsRouteImport.update({
-  id: '/dashboard/settings',
-  path: '/dashboard/settings',
-  getParentRoute: () => rootRouteImport,
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => DashboardRouteRoute,
 } as any)
 const DashboardUploadRoute = DashboardUploadRouteImport.update({
-  id: '/dashboard/upload',
-  path: '/dashboard/upload',
-  getParentRoute: () => rootRouteImport,
+  id: '/upload',
+  path: '/upload',
+  getParentRoute: () => DashboardRouteRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/dashboard': typeof DashboardRouteRouteWithChildren
   '/dashboard/attribution': typeof DashboardAttributionRoute
   '/dashboard/detection': typeof DashboardDetectionRoute
   '/dashboard/explanations': typeof DashboardExplanationsRoute
@@ -106,6 +113,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/dashboard': typeof DashboardRouteRouteWithChildren
   '/dashboard/attribution': typeof DashboardAttributionRoute
   '/dashboard/detection': typeof DashboardDetectionRoute
   '/dashboard/explanations': typeof DashboardExplanationsRoute
@@ -121,6 +129,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/dashboard'
     | '/dashboard/attribution'
     | '/dashboard/detection'
     | '/dashboard/explanations'
@@ -147,6 +156,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/dashboard'
     | '/dashboard/attribution'
     | '/dashboard/detection'
     | '/dashboard/explanations'
@@ -161,6 +171,99 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  DashboardRouteRoute: typeof DashboardRouteRouteWithChildren
+}
+
+declare module '@tanstack/react-router' {
+  interface FileRoutesByPath {
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dashboard': {
+      id: '/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof DashboardRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dashboard/': {
+      id: '/dashboard/'
+      path: '/'
+      fullPath: '/dashboard/'
+      preLoaderRoute: typeof DashboardIndexRouteImport
+      parentRoute: typeof DashboardRouteRoute
+    }
+    '/dashboard/attribution': {
+      id: '/dashboard/attribution'
+      path: '/attribution'
+      fullPath: '/dashboard/attribution'
+      preLoaderRoute: typeof DashboardAttributionRouteImport
+      parentRoute: typeof DashboardRouteRoute
+    }
+    '/dashboard/detection': {
+      id: '/dashboard/detection'
+      path: '/detection'
+      fullPath: '/dashboard/detection'
+      preLoaderRoute: typeof DashboardDetectionRouteImport
+      parentRoute: typeof DashboardRouteRoute
+    }
+    '/dashboard/explanations': {
+      id: '/dashboard/explanations'
+      path: '/explanations'
+      fullPath: '/dashboard/explanations'
+      preLoaderRoute: typeof DashboardExplanationsRouteImport
+      parentRoute: typeof DashboardRouteRoute
+    }
+    '/dashboard/history': {
+      id: '/dashboard/history'
+      path: '/history'
+      fullPath: '/dashboard/history'
+      preLoaderRoute: typeof DashboardHistoryRouteImport
+      parentRoute: typeof DashboardRouteRoute
+    }
+    '/dashboard/metadata': {
+      id: '/dashboard/metadata'
+      path: '/metadata'
+      fullPath: '/dashboard/metadata'
+      preLoaderRoute: typeof DashboardMetadataRouteImport
+      parentRoute: typeof DashboardRouteRoute
+    }
+    '/dashboard/reports': {
+      id: '/dashboard/reports'
+      path: '/reports'
+      fullPath: '/dashboard/reports'
+      preLoaderRoute: typeof DashboardReportsRouteImport
+      parentRoute: typeof DashboardRouteRoute
+    }
+    '/dashboard/review': {
+      id: '/dashboard/review'
+      path: '/review'
+      fullPath: '/dashboard/review'
+      preLoaderRoute: typeof DashboardReviewRouteImport
+      parentRoute: typeof DashboardRouteRoute
+    }
+    '/dashboard/settings': {
+      id: '/dashboard/settings'
+      path: '/settings'
+      fullPath: '/dashboard/settings'
+      preLoaderRoute: typeof DashboardSettingsRouteImport
+      parentRoute: typeof DashboardRouteRoute
+    }
+    '/dashboard/upload': {
+      id: '/dashboard/upload'
+      path: '/upload'
+      fullPath: '/dashboard/upload'
+      preLoaderRoute: typeof DashboardUploadRouteImport
+      parentRoute: typeof DashboardRouteRoute
+    }
+  }
+}
+
+interface DashboardRouteRouteChildren {
   DashboardAttributionRoute: typeof DashboardAttributionRoute
   DashboardDetectionRoute: typeof DashboardDetectionRoute
   DashboardExplanationsRoute: typeof DashboardExplanationsRoute
@@ -173,90 +276,7 @@ export interface RootRouteChildren {
   DashboardIndexRoute: typeof DashboardIndexRoute
 }
 
-declare module '@tanstack/react-router' {
-  interface FileRoutesByPath {
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/dashboard/': {
-      id: '/dashboard/'
-      path: '/dashboard'
-      fullPath: '/dashboard/'
-      preLoaderRoute: typeof DashboardIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/dashboard/attribution': {
-      id: '/dashboard/attribution'
-      path: '/dashboard/attribution'
-      fullPath: '/dashboard/attribution'
-      preLoaderRoute: typeof DashboardAttributionRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/dashboard/detection': {
-      id: '/dashboard/detection'
-      path: '/dashboard/detection'
-      fullPath: '/dashboard/detection'
-      preLoaderRoute: typeof DashboardDetectionRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/dashboard/explanations': {
-      id: '/dashboard/explanations'
-      path: '/dashboard/explanations'
-      fullPath: '/dashboard/explanations'
-      preLoaderRoute: typeof DashboardExplanationsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/dashboard/history': {
-      id: '/dashboard/history'
-      path: '/dashboard/history'
-      fullPath: '/dashboard/history'
-      preLoaderRoute: typeof DashboardHistoryRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/dashboard/metadata': {
-      id: '/dashboard/metadata'
-      path: '/dashboard/metadata'
-      fullPath: '/dashboard/metadata'
-      preLoaderRoute: typeof DashboardMetadataRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/dashboard/reports': {
-      id: '/dashboard/reports'
-      path: '/dashboard/reports'
-      fullPath: '/dashboard/reports'
-      preLoaderRoute: typeof DashboardReportsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/dashboard/review': {
-      id: '/dashboard/review'
-      path: '/dashboard/review'
-      fullPath: '/dashboard/review'
-      preLoaderRoute: typeof DashboardReviewRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/dashboard/settings': {
-      id: '/dashboard/settings'
-      path: '/dashboard/settings'
-      fullPath: '/dashboard/settings'
-      preLoaderRoute: typeof DashboardSettingsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/dashboard/upload': {
-      id: '/dashboard/upload'
-      path: '/dashboard/upload'
-      fullPath: '/dashboard/upload'
-      preLoaderRoute: typeof DashboardUploadRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-  }
-}
-
-const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
+const DashboardRouteRouteChildren: DashboardRouteRouteChildren = {
   DashboardAttributionRoute: DashboardAttributionRoute,
   DashboardDetectionRoute: DashboardDetectionRoute,
   DashboardExplanationsRoute: DashboardExplanationsRoute,
@@ -267,6 +287,15 @@ const rootRouteChildren: RootRouteChildren = {
   DashboardSettingsRoute: DashboardSettingsRoute,
   DashboardUploadRoute: DashboardUploadRoute,
   DashboardIndexRoute: DashboardIndexRoute,
+}
+
+const DashboardRouteRouteWithChildren = DashboardRouteRoute._addFileChildren(
+  DashboardRouteRouteChildren,
+)
+
+const rootRouteChildren: RootRouteChildren = {
+  IndexRoute: IndexRoute,
+  DashboardRouteRoute: DashboardRouteRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
