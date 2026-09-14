@@ -60,7 +60,7 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
   const cycleTheme = () => {
     const order = ['light', 'dark', 'system'] as const;
     const idx = order.indexOf(theme);
-    const next = order[(idx + 1) % order.length];
+    const next = order[(idx + 1) % order.length]!;
     setTheme(next);
     setNotice(`${next.charAt(0).toUpperCase() + next.slice(1)} mode activated.`);
   };

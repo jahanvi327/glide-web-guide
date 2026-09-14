@@ -111,7 +111,7 @@ function generateAttributions(verdict: ScanResult['verdict'], generator: string)
     probability: i === others.length - 1 ? remaining - Math.floor(remaining * 0.6) : Math.floor(remaining * 0.3),
     barClass: g === 'Midjourney' ? 'bg-cyan-400' : g === 'DALL·E' ? 'bg-amber-400' : g === 'Flux' ? 'bg-violet-400' : g === 'GAN' ? 'bg-emerald-400' : 'bg-slate-300',
   }));
-  const main = 100 - others.reduce((s, _g, i) => s + dist[i].probability, 0);
+  const main = 100 - others.reduce((s, _g, i) => s + dist[i]!.probability, 0);
   return [
     { label: generator, probability: main, barClass: 'bg-blue-500' },
     ...dist,
@@ -153,13 +153,13 @@ function generateScan(imageUrl: string, scanId: string): ScanResult {
   const confidence = isReal ? randomBetween(88, 97) : randomBetween(75, 94);
   const confidenceLabel: ScanResult['confidenceLabel'] = confidence >= 85 ? 'High' : confidence >= 70 ? 'Medium' : 'Low';
   const riskLevel: ScanResult['riskLevel'] = isReal ? 'Low' : aiProbability >= 85 ? 'High' : 'Medium';
-  const generator = isReal ? '—' : isUnknown ? 'Unknown AI Generator' : GENERATORS[randomBetween(0, 4)];
+  const generator = isReal ? '—' : isUnknown ? 'Unknown AI Generator' : GENERATORS[randomBetween(0, 4)]!;
   const trustScore = isReal ? randomBetween(80, 98) : randomBetween(15, 45);
   const insightCount = randomBetween(3, 5);
   const pickedInsights = pickN(INSIGHT_TEMPLATES, insightCount);
   const totalWeight = 100;
   const weights = pickedInsights.map((_, i) => i === 0 ? randomBetween(20, 30) : Math.floor((totalWeight - 30) / (insightCount - 1)) + randomBetween(-3, 3));
-  const insights: InsightItem[] = pickedInsights.map((tpl, i) => ({ ...tpl, weight: Math.abs(weights[i] || 5) }));
+  const insights: InsightItem[] = pickedInsights.map((tpl, i) => ({ ...tpl, weight: Math.abs(weights[i] ?? 5) }));
   const attributions = generateAttributions(verdict, generator);
   const metadata = generateMetadata(verdict, trustScore);
   const quickInsights = isReal ? QUICK_INSIGHTS_REAL : QUICK_INSIGHTS_AI;
@@ -202,12 +202,12 @@ const INITIAL_SCAN: ScanResult = {
 };
 
 const INITIAL_HISTORY: ScanHistoryEntry[] = [
-  { id: 'SIG-01248', image: SAMPLE_IMAGES[0], result: 'AI Generated', confidence: '87%', generator: 'Stable Diffusion', date: '14 Sep 2026, 14:32', trustScore: 28 },
-  { id: 'SIG-01247', image: SAMPLE_IMAGES[1], result: 'Real', confidence: '92%', generator: '—', date: '14 Sep 2026, 13:18', trustScore: 94 },
-  { id: 'SIG-01246', image: SAMPLE_IMAGES[0], result: 'AI Generated', confidence: '78%', generator: 'Midjourney', date: '14 Sep 2026, 11:47', trustScore: 35 },
-  { id: 'SIG-01245', image: SAMPLE_IMAGES[2], result: 'Real', confidence: '94%', generator: '—', date: '14 Sep 2026, 10:21', trustScore: 91 },
-  { id: 'SIG-01244', image: SAMPLE_IMAGES[3], result: 'AI Generated', confidence: '81%', generator: 'DALL·E', date: '13 Sep 2026, 19:05', trustScore: 22 },
-  { id: 'SIG-01243', image: SAMPLE_IMAGES[4], result: 'Unknown AI Generator', confidence: '65%', generator: 'Unknown AI Generator', date: '13 Sep 2026, 16:12', trustScore: 40 },
+  { id: 'SIG-01248', image: SAMPLE_IMAGES[0]!, result: 'AI Generated', confidence: '87%', generator: 'Stable Diffusion', date: '14 Sep 2026, 14:32', trustScore: 28 },
+  { id: 'SIG-01247', image: SAMPLE_IMAGES[1]!, result: 'Real', confidence: '92%', generator: '—', date: '14 Sep 2026, 13:18', trustScore: 94 },
+  { id: 'SIG-01246', image: SAMPLE_IMAGES[0]!, result: 'AI Generated', confidence: '78%', generator: 'Midjourney', date: '14 Sep 2026, 11:47', trustScore: 35 },
+  { id: 'SIG-01245', image: SAMPLE_IMAGES[2]!, result: 'Real', confidence: '94%', generator: '—', date: '14 Sep 2026, 10:21', trustScore: 91 },
+  { id: 'SIG-01244', image: SAMPLE_IMAGES[3]!, result: 'AI Generated', confidence: '81%', generator: 'DALL·E', date: '13 Sep 2026, 19:05', trustScore: 22 },
+  { id: 'SIG-01243', image: SAMPLE_IMAGES[4]!, result: 'Unknown AI Generator', confidence: '65%', generator: 'Unknown AI Generator', date: '13 Sep 2026, 16:12', trustScore: 40 },
 ];
 
 type AnalysisContextType = {
@@ -229,7 +229,7 @@ type AnalysisContextType = {
 const AnalysisContext = createContext<AnalysisContextType | null>(null);
 
 export function AnalysisProvider({ children }: { children: ReactNode }) {
-  const [imageUrl, setImageUrl] = useState(SAMPLE_IMAGES[0]);
+  const [imageUrl, setImageUrl] = useState(SAMPLE_IMAGES[0]!);
   const [scan, setScan] = useState<ScanResult>(INITIAL_SCAN);
   const [history, setHistory] = useState<ScanHistoryEntry[]>(INITIAL_HISTORY);
   const [notice, setNotice] = useState('');

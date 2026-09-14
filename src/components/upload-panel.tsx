@@ -27,14 +27,14 @@ export function UploadPanel() {
   };
 
   const loadSample = () => {
-    const random = SAMPLE_IMAGES[Math.floor(Math.random() * SAMPLE_IMAGES.length)];
+    const random = SAMPLE_IMAGES[Math.floor(Math.random() * SAMPLE_IMAGES.length)]!;
     setImageUrl(random);
     setFileName('sample-image.jpg');
     setNotice('Sample image loaded. Click "Analyze now" to scan it.');
   };
 
   const clearImage = () => {
-    setImageUrl(SAMPLE_IMAGES[0]);
+    setImageUrl(SAMPLE_IMAGES[0]!);
     setFileName('');
     setNotice('Image cleared. Upload a new one to analyze.');
   };
